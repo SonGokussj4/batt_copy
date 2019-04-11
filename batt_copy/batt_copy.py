@@ -7,10 +7,15 @@ from cli import Args
 
 
 class Src:
-    a4 = None
-    bild = None
-    defo = None
-    battery_files = []
+    def __init__(self):
+        self.a4 = None
+        self.bild = None
+        self.defo = None
+        self.battery_files = []
+
+    @property
+    def all_files(self):
+        return [self.a4, self.bild, self.defo, self.battery_files]
 
 
 def main():
@@ -34,6 +39,7 @@ def main():
     # Get list of all directories in current folder
     directories = sorted((d for d in curdir.iterdir() if d.is_dir()))
 
+    src_files = Src()
     # # Check if user-entered directories exists
     # for d in directories:
     #     res = any(d in dir_dst.append(dir_src) for d in directories)
@@ -47,35 +53,43 @@ def main():
             continue
         match = re.findall(r'_battery_hv_\d\d\d|_battery_hv_modules_\d\d\d', itempath.name)
         if match:
-            Src.battery_files.append(itempath)
+            src_files.battery_files.append(itempath)
             print(itempath.resolve())
 
         elif itempath.name == 'a4.ses':
-            Src.a4 = itempath
+            src_files.a4 = itempath
             print(itempath.resolve())
-            print()
-            with open(Src.a4, 'r') as f:
-                lines = f.readlines()
-            for line in lines:
-                print(line, end='')
-            print()
+
+            # print()
+            # with open(src_files.a4, 'r') as f:
+            #     lines = f.readlines()
+            # for line in lines:
+            #     print(line, end='')
+            # print()
 
         elif itempath.name == 'DFC_Lokale_Defo_pam':
-            Src.defo = itempath
+            src_files.defo = itempath
             print(itempath.resolve())
 
         elif itempath.name == 'bild.ses':
-            Src.bild = itempath
+            src_files.bild = itempath
             print(itempath.resolve())
 
-    print("Src.a4:", Src.a4)
-    print("Src.bild:", Src.bild)
-    print("Src.defo:", Src.defo)
-    print("Src.battery_files:", Src.battery_files)
+    print("src_files.a4:", src_files.a4)
+    print("src_files.bild:", src_files.bild)
+    print("src_files.defo:", src_files.defo)
+    print("src_files.battery_files:", src_files.battery_files)
 
     # Files acquired, now copy them to 'destination directories'
-    # for dst_dir in dst_dirs:
+    for dst_dir in dst_dirs:
+        dst_resuls_dir = dst_dir / 'RESULTS'
+
         # Check if the dir exists and RESULTS dir exists
+        if not dst_resuls_dir.exists():
+            print(f"ERROR: Destination directory not found: {dst_resuls_dir.resolve()}")
+            continue
+
+        print(f"\nAll files: {src_files.all_files}")
 
         # Copy all files to the new RESULTS directory
 
