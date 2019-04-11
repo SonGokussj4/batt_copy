@@ -1,0 +1,98 @@
+$! encoding: utf-8
+$ Session File written by Animator 4
+$ Session started Wed Feb 20 07:51:16 2019
+$
+$ Command Line Arguments:
+$ Note: special characters are not escaped in names / strings etc.
+$ > Read Session File: 'bild.ses'
+$   rea ses 'bild.ses'
+$ End of Command Line Arguments.
+v["Model"]:xcm siz 700 500
+v["Model"]:ctrlview_l init 1774.95 -376.424 -57.5866
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.004
+v["Model"]:ctrlview_l mouse 0 1 0 0.00285714 -0.004
+v["Model"]:ctrlview_l mouse 0 1 0 0.00428571 -0.004
+v["Model"]:ctrlview_l mouse 0 1 0 0.00285714 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.004
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00285714 -0.006
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.004
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.004
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0.00142857 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 -0.00285714 0
+v["Model"]:ctrlview_l mouse 0 1 0 -0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 -0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 -0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 -0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 -0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 0 0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0 0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0 0.002
+v["Model"]:ctrlview_l mouse 0 1 0 -0.00142857 0
+v["Model"]:ctrlview_l mouse 0 1 0 0 0.002
+v["Model"]:ctrlview_l mouse 0 1 0 -0.00142857 0.004
+v["Model"]:ctrlview_l mouse 0 1 0 0 0.002
+v["Model"]:ctrlview_l init 1774.95 -376.424 -57.5866
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+v["Model"]:ctrlview_l mouse 0 1 0 0 -0.002
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+s[act]:sta set nex
+xcm dia wri img on
+v[act]:xcm fra off
+v["Model"]:xcm pos 0 0
+v["Model"]:xcm siz 708 534
+v[act]:wri png 'DST_RESULTS_FOLDER/BATTERY_DEFORMACE.png'
+v["Model"]:xcm fra on
+v["Model"]:xcm pos 0 0
+v["Model"]:xcm siz 700 500
+xcm dia wri off
+bye
