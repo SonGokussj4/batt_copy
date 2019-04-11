@@ -4,18 +4,41 @@
 import re
 from pathlib import Path
 from cli import Args
+import shutil
 
 
-class Src:
-    def __init__(self):
+class Files:
+    def __init__(self, directory):
+        self.directory = directory
         self.a4 = None
         self.bild = None
         self.defo = None
         self.battery_files = []
+        self.find_files()
+
+    def find_files(self):
+        for itempath in self.directory.glob('**/*'):
+            if itempath.parent.name != 'RESULTS':
+                continue
+            match = re.findall(r'_battery_hv_\d\d\d|_battery_hv_modules_\d\d\d', itempath.name)
+            if match:
+                self.battery_files.append(itempath)
+
+            elif itempath.name == 'a4.ses':
+                self.a4 = itempath
+
+            elif itempath.name == 'DFC_Lokale_Defo_pam':
+                self.defo = itempath
+
+            elif itempath.name == 'bild.ses':
+                self.bild = itempath
 
     @property
     def all_files(self):
-        return [self.a4, self.bild, self.defo, self.battery_files]
+        """Return all files."""
+        files = [self.a4, self.bild, self.defo]
+        files.extend(self.battery_files)
+        return files
 
 
 def main():
@@ -39,42 +62,7 @@ def main():
     # Get list of all directories in current folder
     directories = sorted((d for d in curdir.iterdir() if d.is_dir()))
 
-    src_files = Src()
-    # # Check if user-entered directories exists
-    # for d in directories:
-    #     res = any(d in dir_dst.append(dir_src) for d in directories)
-    #     print('{}: {}'.format(d, res))
-
-    # Locate the src files
-    # a4.ses, DFC_Lokale_Defo_pam, bild.ses, _battery_hv_, _battery_hv_modules_
-    for itempath in src_dir.glob('**/*'):
-        # Ignore files which are not in 'RESULTS' folder
-        if itempath.parent.name != 'RESULTS':
-            continue
-        match = re.findall(r'_battery_hv_\d\d\d|_battery_hv_modules_\d\d\d', itempath.name)
-        if match:
-            src_files.battery_files.append(itempath)
-            print(itempath.resolve())
-
-        elif itempath.name == 'a4.ses':
-            src_files.a4 = itempath
-            print(itempath.resolve())
-
-            # print()
-            # with open(src_files.a4, 'r') as f:
-            #     lines = f.readlines()
-            # for line in lines:
-            #     print(line, end='')
-            # print()
-
-        elif itempath.name == 'DFC_Lokale_Defo_pam':
-            src_files.defo = itempath
-            print(itempath.resolve())
-
-        elif itempath.name == 'bild.ses':
-            src_files.bild = itempath
-            print(itempath.resolve())
-
+    src_files = Files(src_dir)
     print("src_files.a4:", src_files.a4)
     print("src_files.bild:", src_files.bild)
     print("src_files.defo:", src_files.defo)
@@ -89,9 +77,12 @@ def main():
             print(f"ERROR: Destination directory not found: {dst_resuls_dir.resolve()}")
             continue
 
-        print(f"\nAll files: {src_files.all_files}")
-
         # Copy all files to the new RESULTS directory
+        print(f"\nAll files: {src_files.all_files}")
+        for src_file in src_files.all_files:
+            dst_file = dst_resuls_dir / src_file.name
+            print(f"INFO: Copying {src_file.name} --> {dst_file.resolve()}")
+            shutil.copyfile(src_file, dst_file)
 
         # Modify a4.ses - reflect new path
         # v[act]:wri png '.....'
