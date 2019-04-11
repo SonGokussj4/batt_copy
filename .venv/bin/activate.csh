@@ -10,7 +10,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/ST/Evektor/UZIV/JVERNER/PROJEKTY/GIT/jverner/TEST/batt_copy/.venv"
+setenv VIRTUAL_ENV "/ST/Evektor/UZIV/JVERNER/PROJEKTY/GIT/jverner/batt_copy/.venv"
 
 set _OLD_VIRTUAL_PATH="$PATH:q"
 setenv PATH "$VIRTUAL_ENV:q/bin:$PATH:q"

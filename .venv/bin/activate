@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/ST/Evektor/UZIV/JVERNER/PROJEKTY/GIT/jverner/TEST/batt_copy/.venv"
+VIRTUAL_ENV="/ST/Evektor/UZIV/JVERNER/PROJEKTY/GIT/jverner/batt_copy/.venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

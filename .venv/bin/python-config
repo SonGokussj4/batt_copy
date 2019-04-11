@@ -1,4 +1,4 @@
-#!/ST/Evektor/UZIV/JVERNER/PROJEKTY/GIT/jverner/TEST/batt_copy/.venv/bin/python
+#!/ST/Evektor/UZIV/JVERNER/PROJEKTY/GIT/jverner/batt_copy/.venv/bin/python
 
 import sys
 import getopt
