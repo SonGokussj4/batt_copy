@@ -8,14 +8,43 @@ from cli import Args
 from pathlib import Path
 
 
+# TODO:
+# a4, bild a DFC to kopiruje z SOURCE_FILES
+# /ST/Evektor/UZIV/JVERNER/PROJEKTY/GIT/jverner/batt_copy/batt_copy/source_files
+#
+# start
+# v puvodnim to kopiruje battery z MODEL (vzdy)
+# pak se to podiva, zda je ta fyzicky udelana baterie
+# pokud neni, tak to automaticky pres ansu vytvori
+#   otevre, nacte to puvodni baterii
+#   vyfiltruje to, co je potreba a ulozi pod includem
+#   doda se lepsi jmeno
+# pokud je, ta se to uzivate zepta (automatika?), zda ji chce kopirovat nebo vytvorit
+# pak to ze SOURCE_FILES zkopiruje
+# a4.ses
+#   v nem nahradi v radku: v[act]:wri png 'DST_RESULTS_FOLDER/BATTERY_DEFORMACE.png'
+#   DST_RESULTS_FOLDER za RESULTS slozku targetu
+# bild.ses
+#   v nem nahradi v radku: rea geo Pamcrash './MODEL_BATTERY_INC'
+#   MODEL_BATTERY_INC za nazev .inc te baterie prekpirovane z modelu
+# DFC_Lokale_Defo_pam
+#
+# V cilove slozce to najde vsechny DSY.fz soubory, mel by byt jen jeden
+#
+# Jakmile je zkopirovano, tak se tam skript CD
+# a spusti
+# ./DFC_Lokale_Defo_pam <nalezeny.DSY.fz> file_defo.DSY.fz <upraveny_SK..._battery_hv_modules_...inc>
+# konec
+
+
 class Files:
     """Input: project directory, eg. SK3165EUB_ABF_103."""
 
     def __init__(self, directory):
         self.directory = directory
-        self.a4 = None
-        self.bild = None
-        self.defo = None
+        # self.a4 = None
+        # self.bild = None
+        # self.defo = None
         self.battery_files = []
         self.find_files()
 
@@ -101,8 +130,8 @@ def main():
     print("DEBUG: src_dir:", src_dir)
     print("DEBUG: dst_dirs:", dst_dirs)
 
-    # Get list of all directories in current folder
-    directories = sorted((d for d in curdir.iterdir() if d.is_dir()))
+    # # Get list of all directories in current folder
+    # directories = sorted((d for d in curdir.iterdir() if d.is_dir()))
 
     src_files = Files(src_dir)
     # print("src_files.a4:", src_files.a4)
