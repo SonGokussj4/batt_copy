@@ -37,80 +37,6 @@ from pathlib import Path
 # konec
 
 
-class Files:
-    """Input: project directory, eg. SK3165EUB_ABF_103."""
-
-    def __init__(self, directory):
-        self.directory = directory
-        # self.a4 = None
-        # self.bild = None
-        # self.defo = None
-        self.battery_files = []
-        self.find_files()
-
-    def find_files(self):
-        for itempath in self.directory.glob('**/*'):
-            if itempath.parent.name != 'RESULTS':
-                continue
-
-            match = re.findall(r'_battery_hv_\d\d\d|_battery_hv_modules_\d\d\d', itempath.name)
-            if match:
-                self.battery_files.append(itempath)
-
-            elif itempath.name == 'a4.ses':
-                self.a4 = itempath
-
-            elif itempath.name == 'DFC_Lokale_Defo_pam':
-                self.defo = itempath
-
-            elif itempath.name == 'bild.ses':
-                self.bild = itempath
-
-    @property
-    def all_files(self):
-        """Return all files."""
-        files = [self.a4, self.bild, self.defo]
-        files.extend(self.battery_files)
-        return files
-
-    def modify_a4(self):
-        """
-        Modify a4.ses - reflect new path
-
-        v[act]:wri png '.....'
-        """
-        print(f"Modifying: {self.a4.name}")
-        with open(self.a4, 'r') as f:
-            lines = [line.strip() for line in f.readlines()]
-        lines = [re.sub(r"/ST/.*/RESULTS", str(self.a4.parent.resolve()), line)
-                 if line.startswith('v[act]:wri png')
-                 else line
-                 for line in lines]
-        with open(self.a4, 'w') as f:
-            f.writelines(lines)
-            print(f"Lines within {self.a4.name} updated")
-
-    def modify_bild(self):
-        """
-        Modify build.ses - reflect new ndame
-
-        # rea geo Pamcrash './....'
-        """
-        print(f"Modifying: {self.bild.name}")
-        with open(self.bild, 'r') as f:
-            lines = [line.strip() for line in f.readlines()]
-
-        # newlines = []
-        # for line in lines:
-        #     if line.startswith("rea geo Pamcrash './SK") and '_battery_' in line:
-        #         newline = re.sub(r"/ST/.*/RESULTS", str(self.a4.parent.resolve()), line)
-        #         newlines.append(f'{newline}\n')
-        #     else:
-        #         newlines.append(f'{line}\n')
-        # with open(self.bild, 'w') as f:
-        #     f.writelines(newlines)
-        #     print(f"Lines within {self.bild.name} updated")
-
 
 def main():
 
@@ -130,10 +56,20 @@ def main():
     print("DEBUG: src_dir:", src_dir)
     print("DEBUG: dst_dirs:", dst_dirs)
 
-    # # Get list of all directories in current folder
-    # directories = sorted((d for d in curdir.iterdir() if d.is_dir()))
+    # Find battery files from Source Dir
+    # from MODEL folder - base battery include
+    # from RESULTS folder - edited battery include, if it's there, ask if create or copy
+    batt_files = myclass.BattFiles(src_dir)
+    print("BASE_BATT: ", batt_files.base_batt.name)
+    print("MODIF_BATT: ", batt_files.modif_batt.name)
 
-    src_files = Files(src_dir)
+    # Copy base batt into dest folder
+
+
+    exit()
+
+
+    src_files = myclass.Files(src_dir)
     # print("src_files.a4:", src_files.a4)
     # print("src_files.bild:", src_files.bild)
     # print("src_files.defo:", src_files.defo)
@@ -155,7 +91,7 @@ def main():
             print(f"INFO: Copying {src_file.name} --> {dst_file.resolve()}")
             # shutil.copyfile(src_file, dst_file)
 
-        dst_files = Files(dst_dir)
+        dst_files = myclass.Files(dst_dir)
         # print("dst_files.a4:", dst_files.a4)
         # print("dst_files.bild:", dst_files.bild)
         # print("dst_files.defo:", dst_files.defo)
