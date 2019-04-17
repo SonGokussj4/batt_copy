@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
-# import userlib
+import os
 import re
 import shutil
 import myclass
 from cli import Args
 from pathlib import Path
-
 
 # TODO:
 # a4, bild a DFC to kopiruje z SOURCE_FILES
@@ -37,12 +36,7 @@ from pathlib import Path
 # konec
 
 
-
 def main():
-
-    # print("Nacitam knihovnu...")
-    # print(dir(userlib))
-
     print("DEBUG: Args.args:", Args.args, '\n')
 
     # # Get user entered directories, ignore trailing slash
@@ -53,77 +47,65 @@ def main():
     src_dir: Path = Path(curdir / Args.args.source.strip('/')).resolve()
     dst_dirs: Path = [Path(curdir / d.strip('/')).resolve() for d in Args.args.dest]
 
-    print("DEBUG: src_dir:", src_dir)
-    print("DEBUG: dst_dirs:", dst_dirs)
-
     # Find battery files from Source Dir
     # from MODEL folder - base battery include
     # from RESULTS folder - edited battery include, if it's there, ask if create or copy
     batt_files = myclass.BattFiles(src_dir)
-    print("BASE_BATT: ", batt_files.base_batt.name)
-    print("MODIF_BATT: ", batt_files.modif_batt.name)
-
-    # Copy base batt into dest folder
-
-
-    exit()
-
-
-    src_files = myclass.Files(src_dir)
-    # print("src_files.a4:", src_files.a4)
-    # print("src_files.bild:", src_files.bild)
-    # print("src_files.defo:", src_files.defo)
-    # print("src_files.battery_files:", src_files.battery_files)
 
     # Files acquired, now copy them to 'destination directories'
     for dst_dir in dst_dirs:
         dst_resuls_dir = dst_dir / 'RESULTS'
 
-        # Check if the dir exists and RESULTS dir exists
+        # Check if the dest RESULTS dir exists
         if not dst_resuls_dir.exists():
-            print(f"ERROR: Destination directory not found: {dst_resuls_dir.resolve()}")
+            print(f"[ ERROR ] Destination directory not found: {dst_resuls_dir.resolve()}")
             continue
 
-        # Copy all files to the new RESULTS directory
-        print(f"\nAll files: {src_files.all_files}")
-        for src_file in src_files.all_files:
-            dst_file = dst_resuls_dir / src_file.name
-            print(f"INFO: Copying {src_file.name} --> {dst_file.resolve()}")
-            # shutil.copyfile(src_file, dst_file)
+        # Copy base batt into dest folder
+        batt_files.copy_base_batt(dst_resuls_dir)
 
-        dst_files = myclass.Files(dst_dir)
-        # print("dst_files.a4:", dst_files.a4)
-        # print("dst_files.bild:", dst_files.bild)
-        # print("dst_files.defo:", dst_files.defo)
-        # print("dst_files.battery_files:", dst_files.battery_files)
+        # Check if modif batt exists, if not, create it from the base one
+        if batt_files.modif_batt is not None:
+            print("[ INFO ] Modif batt exists, copying...")
+            batt_files.copy_modif_batt(dst_resuls_dir)
+        else:
+            modif_batt_name = batt_files.base_batt.name.replace('battery_hv', 'battery_hv_modules')
+            batt_files.modif_batt = dst_resuls_dir / modif_batt_name
+            if batt_files.modif_batt.exists():
+                res = input("[ WARNING ] Modif batt found in target directory. Create anyway? [yN]: ")
+                if res.lower() in ['y', 'yes']:
+                    batt_files.create_modif_batt()
+                else:
+                    print("[ INFO ] Modified battery was not created")
+            else:
+                res = input("[ WARNING ] Modif batt not found. Create? [yN]: ")
+                if res.lower() in ['y', 'yes']:
+                    batt_files.create_modif_batt()
+                if batt_files.modif_batt.exists():
+                    print("[ INFO ] Modified battery created.")
+                else:
+                    print("[ ERROR ] Something went wrong within ANSA script. Modified battery was not created.")
 
-        # Modify a4.ses - reflect new path
-        # v[act]:wri png '.....'
-        dst_files.modify_a4()
+    src_files = myclass.SourceFiles()
+    print("DEBUG: batt_files.modif_batt:", batt_files.modif_batt)
+    src_files.copy_modif_a4(dst_resuls_dir)
+    src_files.copy_modif_bild(dst_resuls_dir, inc_name=batt_files.base_batt.name)
+    src_files.copy_DFC(dst_resuls_dir)
 
-        # Modify build.ses - reflect new ndame
-        # rea geo Pamcrash './....'
-        dst_files.modify_bild()
+    # Change dir to new RESULTS dir
+    os.chdir(dst_resuls_dir)
 
-        # Change dir to new RESULTS dir
+    # Get the DSY.fz file
+    for itempath in dst_resuls_dir.glob('*.DSY.fz'):
+        if itempath.name.endswith('DSY.fz') and itempath.name.startswith('SK'):
+            dsy_file = itempath
+            print(f"[ INFO ] DSY file found... '{dsy_file.resolve()}'")
+            continue
 
-        # Run ./DFC_Lokale_Defo_pam <...>.DSY.fz file_defo.DSY.fz <SK.._battery_hv_modules_..>.inc
-
+    cmd = f'./DFC_Lokale_Defo_pam {dsy_file.name} file_defo.DSY.fz {batt_files.modif_batt.name}'
+    print(f"[ INFO ] Running cmd: '{cmd}'")
+    os.system(cmd)
 
 
 if __name__ == '__main__':
     main()
-
-
-# from tempfile import mkstemp
-# from shutil import move
-# from os import remove
-
-# def replace(source_file_path, pattern, substring):
-#     fh, target_file_path = mkstemp()
-#     with open(target_file_path, 'w') as target_file:
-#         with open(source_file_path, 'r') as source_file:
-#             for line in source_file:
-#                 target_file.write(line.replace(pattern, substring))
-#     remove(source_file_path)
-#     move(target_file_path, source_file_path)
