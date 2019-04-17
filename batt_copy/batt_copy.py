@@ -6,6 +6,7 @@ import shutil
 import myclass
 from cli import Args
 from pathlib import Path
+from pycolor import atr, fg, bg  # atr.b, atr.reset_all, fg.lr, fg.g
 
 # TODO:
 # a4, bild a DFC to kopiruje z SOURCE_FILES
@@ -37,10 +38,6 @@ from pathlib import Path
 
 
 def main():
-    print("DEBUG: Args.args:", Args.args, '\n')
-
-    # # Get user entered directories, ignore trailing slash
-    # dirs = [d.strip('/') for d in Args.args.filenames]
 
     # First is Source directory, Other are destination directories
     curdir = Path('.')
@@ -58,7 +55,7 @@ def main():
 
         # Check if the dest RESULTS dir exists
         if not dst_resuls_dir.exists():
-            print(f"[ ERROR ] Destination directory not found: {dst_resuls_dir.resolve()}")
+            print(f"{atr.bo}{fg.lr}[ WARNING ]{atr.reset_all} Destination directory not found: {dst_resuls_dir.resolve()}")
             continue
 
         # Copy base batt into dest folder
@@ -66,28 +63,28 @@ def main():
 
         # Check if modif batt exists, if not, create it from the base one
         if batt_files.modif_batt is not None:
-            print("[ INFO ] Modif batt exists, copying...")
+            print(f"{atr.bo}[ INFO ]{atr.reset_all} Modif batt exists, copying...")
             batt_files.copy_modif_batt(dst_resuls_dir)
         else:
             modif_batt_name = batt_files.base_batt.name.replace('battery_hv', 'battery_hv_modules')
             batt_files.modif_batt = dst_resuls_dir / modif_batt_name
             if batt_files.modif_batt.exists():
-                res = input("[ WARNING ] Modif batt found in target directory. Create anyway? [yN]: ")
+                res = input(f"{atr.bo}{fg.y}[ WARNING ]{atr.reset_all} Modif batt found in target directory. Create anyway? [yN]: ")
                 if res.lower() in ['y', 'yes']:
                     batt_files.create_modif_batt()
                 else:
-                    print("[ INFO ] Modified battery was not created")
+                    print(f"{atr.bo}[ INFO ]{atr.reset_all} Modified battery was not created")
             else:
-                res = input("[ WARNING ] Modif batt not found. Create? [yN]: ")
+                res = input(f"{atr.bo}{fg.y}[ WARNING ]{atr.reset_all} Modif batt not found. Create? [yN]: ")
                 if res.lower() in ['y', 'yes']:
                     batt_files.create_modif_batt()
                 if batt_files.modif_batt.exists():
-                    print("[ INFO ] Modified battery created.")
+                    print(f"{atr.bo}[ INFO ]{atr.reset_all} Modified battery created.")
                 else:
-                    print("[ ERROR ] Something went wrong within ANSA script. Modified battery was not created.")
+                    print(f"{atr.bo}{fg.lr}[ WARNING ]{atr.reset_all} Something went wrong within ANSA script. Modified battery was not created.")
 
+    # Copy and modify source files (a4.ses, bild.ses, DFC_Lokale_Defo_pam)
     src_files = myclass.SourceFiles()
-    print("DEBUG: batt_files.modif_batt:", batt_files.modif_batt)
     src_files.copy_modif_a4(dst_resuls_dir)
     src_files.copy_modif_bild(dst_resuls_dir, inc_name=batt_files.base_batt.name)
     src_files.copy_DFC(dst_resuls_dir)
@@ -99,11 +96,11 @@ def main():
     for itempath in dst_resuls_dir.glob('*.DSY.fz'):
         if itempath.name.endswith('DSY.fz') and itempath.name.startswith('SK'):
             dsy_file = itempath
-            print(f"[ INFO ] DSY file found... '{dsy_file.resolve()}'")
+            print(f"{atr.bo}[ INFO ]{atr.reset_all} DSY file found... '{dsy_file.resolve()}'")
             continue
 
     cmd = f'./DFC_Lokale_Defo_pam {dsy_file.name} file_defo.DSY.fz {batt_files.modif_batt.name}'
-    print(f"[ INFO ] Running cmd: '{cmd}'")
+    print(f"{atr.bo}[ INFO ]{atr.reset_all} Running cmd: '{cmd}'")
     os.system(cmd)
 
 
