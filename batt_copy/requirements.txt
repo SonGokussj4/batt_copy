@@ -1,1 +1,2 @@
-pytest
+-i https://pypi.org/simple
+pycolor==1.2.1

@@ -4,6 +4,7 @@ sys.path.append('{parent}/pylibs'.format(parent='/'.join(__file__.split('/')[0:-
 from ansa import base, constants
 from collections import defaultdict
 from pathlib import Path
+from pycolor import atr, fg, bg
 
 
 def main(base_batt, modif_batt):
@@ -11,7 +12,7 @@ def main(base_batt, modif_batt):
     base.InputPamCrash(filename=base_batt)
 
     # Load PIDs to show
-    print("[ INFO ] Loading file with list of battery nodes...")
+    print("{}[ INFO ]{} Loading file with list of battery nodes...".format(atr.bo, atr.reset_all))
     curdir = Path('.')
     batt_nodes_file = curdir / 'PID_BAT_HV_MODULE.txt'
     res = input('File with battery nodes [{}]: '.format(batt_nodes_file))
@@ -19,8 +20,8 @@ def main(base_batt, modif_batt):
         batt_nodes_file = curdir / res
 
     if not batt_nodes_file.exists():
-        print("[ ERROR ] {} not found...".format(batt_nodes_file.absolute()))
-        print("[ INFO ] Trying to find battery modules by name: '_BATTERIEMODUL_'...")
+        print("{}{}[ ERROR ]{} {} not found...".format(atr.bo, fg.lr, atr.reset_all, batt_nodes_file.absolute()))
+        print("{}[ INFO ]{} Trying to find battery modules by name: '_BATTERIEMODUL_'...".format(atr.bo, atr.reset_all))
         #TODO: vybrat to pomoci NAZVU
         pids_to_show = []
     else:
@@ -41,7 +42,7 @@ def main(base_batt, modif_batt):
     dc_left = defaultdict(list)
     dc_right = defaultdict(list)
 
-    print("[ INFO ] Creating modulesX SETs within Ansa")
+    print("{}[ INFO ]{} Creating modulesX SETs within Ansa".format(atr.bo, atr.reset_all))
     for idx, pid in enumerate(props_left):
         dc_left['module{}'.format(idx % 6 + 1)].append(pid)
         #print(idx % 6 + 1, pid)
@@ -72,8 +73,7 @@ def main(base_batt, modif_batt):
     dc = dc_left
 
     # Create new include
-    print("[ INFO ] Creating include...")
-    print("DEBUG: base_batt:", base_batt)
+    print("{}[ INFO ]{} Creating include...".format(atr.bo, atr.reset_all))
     inc_name = 'SK3165EUB_xAB_battery_hv_007_2015-83kWh.inc'.replace('battery_hv', 'battery_hv_modules')
     all_includes = base.CollectEntities(constants.PAMCRASH, None, 'INCLUDE', True)
     # Check if include already exists, if yes, delete it (not entities within)
@@ -82,7 +82,7 @@ def main(base_batt, modif_batt):
         base.DeleteEntity(existing_inc, compress=True)
     myinclude = base.CreateEntity(constants.PAMCRASH, 'INCLUDE', {'Name': inc_name})
 
-    print("[ INFO ] Adding SETs (moduleX) into include...")
+    print("{}[ INFO ]{} Adding SETs (moduleX) into include...".format(atr.bo, atr.reset_all))
     for idx in range(1, 13):
         set_name = 'module{}'.format(idx)
         # Check if SET exists, if yes, delete it (not entities within)
@@ -100,7 +100,7 @@ def main(base_batt, modif_batt):
         # Add SET to INCLUDE
         base.AddToInclude(myinclude, myset)
 
-    print("[ INFO ] Outputting to: {}".format(modif_batt))
+    print("{}[ INFO ]{} Outputting to: {}".format(atr.bo, atr.reset_all, modif_batt))
     base.OutputPamCrash(modif_batt, include_output_mode='contents', include=myinclude)
 
 

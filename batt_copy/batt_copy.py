@@ -83,8 +83,8 @@ def main():
                 else:
                     print(f"{atr.bo}{fg.lr}[ WARNING ]{atr.reset_all} Something went wrong within ANSA script. Modified battery was not created.")
 
-    # Copy and modify source files (a4.ses, bild.ses, DFC_Lokale_Defo_pam)
     src_files = myclass.SourceFiles()
+    # Copy and modify source files (a4.ses, bild.ses, DFC_Lokale_Defo_pam)
     src_files.copy_modif_a4(dst_resuls_dir)
     src_files.copy_modif_bild(dst_resuls_dir, inc_name=batt_files.base_batt.name)
     src_files.copy_DFC(dst_resuls_dir)
