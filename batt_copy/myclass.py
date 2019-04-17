@@ -141,7 +141,7 @@ class BattFiles:
         """Start Ansa in background and create a Modified battery form Base battery."""
         print(f"{atr.bo}[ INFO ]{atr.reset_all} Creating modif battery...")
         script_path = '{parent_folder}/modifybatt.py'.format(parent_folder=Path(__file__).parent)
-        os.system('/expSW/SOFTWARE/BETA_CAE_Systems/ansa_v19.1.1/ansa64.sh '
+        os.system('ansa '
                   '-b '  # background
                   '-lm_retry 5 '  # if no licence, try again in 5 second
                   '-exec "load_script:{script_path}" '  # start this script
