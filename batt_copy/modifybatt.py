@@ -73,8 +73,8 @@ def main(base_batt, modif_batt):
     dc = dc_left
 
     # Create new include
-    print("{}[ INFO ]{} Creating include...".format(atr.bo, atr.reset_all))
-    inc_name = 'SK3165EUB_xAB_battery_hv_007_2015-83kWh.inc'.replace('battery_hv', 'battery_hv_modules')
+    inc_name = str(Path(modif_batt).name)
+    print("{}[ INFO ]{} Creating include... {}".format(atr.bo, atr.reset_all, inc_name))
     all_includes = base.CollectEntities(constants.PAMCRASH, None, 'INCLUDE', True)
     # Check if include already exists, if yes, delete it (not entities within)
     if any([include._name == inc_name for include in all_includes]):
