@@ -8,6 +8,7 @@ VAR_x_DEFAULT = 'DefaultValue'
 
 
 class Args:
+    """Who knows why."""
     args = None
 
 
