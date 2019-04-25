@@ -99,7 +99,7 @@ def main():
                 print(f"{atr.bo}[ INFO ]{atr.reset_all} DSY file found... '{dsy_file.resolve()}'")
                 continue
 
-        cmd = f'./DFC_Lokale_Defo_pam {dsy_file.name} file_defo.DSY.fz {batt_files.modif_batt.name}'
+        cmd = f'./DFC_Lokale_Defo_pam {dsy_file.name} file_defo.DSY.fz {batt_files.modif_batt.name} &'
         print(f"{atr.bo}[ INFO ]{atr.reset_all} Running cmd: '{cmd}'")
         os.system(cmd)
 
