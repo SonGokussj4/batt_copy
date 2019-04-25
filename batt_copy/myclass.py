@@ -108,7 +108,7 @@ class BattFiles:
         RESULTS_dir = self._directory / 'RESULTS'
         found_batteries = []
         for itempath in RESULTS_dir.glob('*.inc'):
-            match = re.findall(r'_battery_hv_modulses_\d\d\d', itempath.name)
+            match = re.findall(r'_battery_hv_modules_\d\d\d', itempath.name)
             if match:
                 found_batteries.append(itempath)
         if len(found_batteries) > 1:
