@@ -83,25 +83,25 @@ def main():
                 else:
                     print(f"{atr.bo}{fg.lr}[ WARNING ]{atr.reset_all} Something went wrong within ANSA script. Modified battery was not created.")
 
-    src_files = myclass.SourceFiles()
-    # Copy and modify source files (a4.ses, bild.ses, DFC_Lokale_Defo_pam)
-    src_files.copy_modif_a4(dst_resuls_dir)
-    src_files.copy_modif_bild(dst_resuls_dir, inc_name=batt_files.base_batt.name)
-    src_files.copy_DFC(dst_resuls_dir)
+        src_files = myclass.SourceFiles()
+        # Copy and modify source files (a4.ses, bild.ses, DFC_Lokale_Defo_pam)
+        src_files.copy_modif_a4(dst_resuls_dir)
+        src_files.copy_modif_bild(dst_resuls_dir, inc_name=batt_files.base_batt.name)
+        src_files.copy_DFC(dst_resuls_dir)
 
-    # Change dir to new RESULTS dir
-    os.chdir(dst_resuls_dir)
+        # Change dir to new RESULTS dir
+        os.chdir(dst_resuls_dir)
 
-    # Get the DSY.fz file
-    for itempath in dst_resuls_dir.glob('*.DSY.fz'):
-        if itempath.name.endswith('DSY.fz') and itempath.name.startswith('SK'):
-            dsy_file = itempath
-            print(f"{atr.bo}[ INFO ]{atr.reset_all} DSY file found... '{dsy_file.resolve()}'")
-            continue
+        # Get the DSY.fz file
+        for itempath in dst_resuls_dir.glob('*.DSY.fz'):
+            if itempath.name.endswith('DSY.fz') and itempath.name.startswith('SK'):
+                dsy_file = itempath
+                print(f"{atr.bo}[ INFO ]{atr.reset_all} DSY file found... '{dsy_file.resolve()}'")
+                continue
 
-    cmd = f'./DFC_Lokale_Defo_pam {dsy_file.name} file_defo.DSY.fz {batt_files.modif_batt.name}'
-    print(f"{atr.bo}[ INFO ]{atr.reset_all} Running cmd: '{cmd}'")
-    os.system(cmd)
+        cmd = f'./DFC_Lokale_Defo_pam {dsy_file.name} file_defo.DSY.fz {batt_files.modif_batt.name}'
+        print(f"{atr.bo}[ INFO ]{atr.reset_all} Running cmd: '{cmd}'")
+        os.system(cmd)
 
 
 if __name__ == '__main__':
