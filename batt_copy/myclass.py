@@ -24,6 +24,7 @@ class SourceFiles:
         self.a4 = self._directory / 'a4.ses'
         self.bild = self._directory / 'bild.ses'
         self.DFC = self._directory / 'DFC_Lokale_Defo_pam'
+        self.proc_id = ""
 
     def copy_modif_a4(self, dst_dir):
         """
@@ -32,10 +33,10 @@ class SourceFiles:
         v[act]:wri png 'DST_RESULTS_FOLDER/BATTERY_DEFORMACE.png'
         """
         dst_filepath = dst_dir / 'a4.ses'
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Copying a4.ses --> {dst_filepath}")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Copying a4.ses --> {dst_filepath}")
         shutil.copyfile(self.a4, dst_filepath)
 
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Modifying: {dst_filepath}")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Modifying: {dst_filepath}")
         with open(dst_filepath, 'r') as f:
             lines = f.readlines()
         lines = [re.sub(r"DST_RESULTS_FOLDER", str(dst_dir.resolve()), line)
@@ -44,7 +45,7 @@ class SourceFiles:
                  for line in lines]
         with open(dst_filepath, 'w') as f:
             f.writelines(lines)
-            print(f"{atr.bo}[ INFO ]{atr.reset_all} Lines within {dst_filepath.name} updated")
+            print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Lines within {dst_filepath.name} updated")
 
     def copy_modif_bild(self, dst_dir, inc_name):
         """
@@ -53,10 +54,10 @@ class SourceFiles:
         rea geo Pamcrash './MODEL_BATTERY_INC'
         """
         dst_filepath = dst_dir / 'bild.ses'
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Copying bild.ses --> {dst_filepath}")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Copying bild.ses --> {dst_filepath}")
         shutil.copyfile(self.bild, dst_filepath)
 
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Modifying: {dst_filepath}")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Modifying: {dst_filepath}")
         with open(dst_filepath, 'r') as f:
             lines = f.readlines()
 
@@ -66,12 +67,12 @@ class SourceFiles:
                  for line in lines]
         with open(dst_filepath, 'w') as f:
             f.writelines(lines)
-            print(f"{atr.bo}[ INFO ]{atr.reset_all} Lines within {dst_filepath.name} updated")
+            print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Lines within {dst_filepath.name} updated")
 
     def copy_DFC(self, dst_dir):
         """Copy DFC_Lokale_Defo_pam file into dst_dir."""
         dst_filepath = dst_dir / self.DFC.name
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Copying {self.DFC.name} --> {dst_filepath}")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Copying {self.DFC.name} --> {dst_filepath}")
         shutil.copyfile(self.DFC, dst_filepath)
         # Make it executable
         os.system(f"chmod +x {dst_filepath}")
@@ -88,6 +89,7 @@ class BattFiles:
         self._directory = directory
         self.base_batt = self._get_base_batt()
         self.modif_batt = self._get_modif_batt()
+        self.proc_id = ""
 
     def _get_base_batt(self):
         """Search through SRC MODEL folder and return inc .*_batter_hv_NumNumNum.*"""
@@ -99,7 +101,7 @@ class BattFiles:
             if match:
                 found_batteries.append(itempath)
         if len(found_batteries) > 1:
-            print(f"{atr.bo}{fg.lr}[ WARNING ]{atr.reset_all} Found more batteries... WHAT NOW??? EXIT")
+            print(f"{atr.bo}{fg.lr}[ WARNING ]{atr.reset_all}[{self.proc_id}] Found more batteries... WHAT NOW??? EXIT")
             exit()
         return found_batteries[0]
 
@@ -112,10 +114,10 @@ class BattFiles:
             if match:
                 found_batteries.append(itempath)
         if len(found_batteries) > 1:
-            print(f"{atr.bo}{fg.lr}[ WARNING ]{atr.reset_all} Found more MODIFIED batteries... WHAT NOW??? EXIT")
+            print(f"{atr.bo}{fg.lr}[ WARNING ]{atr.reset_all}[{self.proc_id}] Found more MODIFIED batteries... WHAT NOW??? EXIT")
             exit()
         elif len(found_batteries) == 0:
-            print("f{atr.bo}[ INFO ]{atr.reset_all} _batter_hv_modules_ include not found. Creating...")
+            print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] _batter_hv_modules_ include not found. Creating...")
             # TODO: Ansa script to create a battery
             return None
         return found_batteries[0]
@@ -124,22 +126,22 @@ class BattFiles:
         """Copy SRC battery into target folder."""
         # TODO: nekopirovat to i do MODEL folder?
         target_filepath = target / self.base_batt.name
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Copying {self.base_batt} --> {target_filepath}")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Copying {self.base_batt} --> {target_filepath}")
         os.system("rsync -ah --progress {} {}".format(self.base_batt, target_filepath))
         # shutil.copy(self.base_batt, target_filepath)
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Base battery copied.")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Base battery copied.")
 
     def copy_modif_batt(self, target):
         """Copy MODIF battery into target folder."""
         target_filepath = target / self.modif_batt.name
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Copying {self.modif_batt} --> {target_filepath}")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Copying {self.modif_batt} --> {target_filepath}")
         os.system("rsync -ah --progress {} {}".format(self.modif_batt, target_filepath))
         # shutil.copy(self.modif_batt, target_filepath)
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} MODIF battery copied.")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] MODIF battery copied.")
 
     def create_modif_batt(self):
         """Start Ansa in background and create a Modified battery form Base battery."""
-        print(f"{atr.bo}[ INFO ]{atr.reset_all} Creating modif battery...")
+        print(f"{atr.bo}[ INFO ]{atr.reset_all}[{self.proc_id}] Creating modif battery...")
         script_path = '{parent_folder}/modifybatt.py'.format(parent_folder=Path(__file__).parent)
         os.system('ansa '
                   '-b '  # background
